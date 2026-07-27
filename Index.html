@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Balloutt Trades — Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #0d0131;
+      color: #f0eaff;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+    }
+    .container {
+      max-width: 500px;
+      width: 100%;
+    }
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: #c99bff;
+    }
+    .sub {
+      color: #a89cc4;
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+    .card {
+      background: rgba(168, 85, 247, 0.06);
+      border: 1px solid rgba(168, 85, 247, 0.15);
+      border-radius: 16px;
+      padding: 16px 18px;
+      margin-bottom: 16px;
+    }
+    .card h2 {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #a89cc4;
+      margin-bottom: 12px;
+    }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(168, 85, 247, 0.06);
+    }
+    .row:last-child {
+      border-bottom: none;
+    }
+    .label {
+      color: #d4ccf0;
+      font-size: 15px;
+    }
+    .value {
+      font-weight: 700;
+      font-size: 16px;
+    }
+    .value.green {
+      color: #3ce88a;
+    }
+    .value.red {
+      color: #ff3b4e;
+    }
+    .value.violet {
+      color: #c99bff;
+    }
+    .total {
+      font-size: 32px;
+      font-weight: 800;
+      color: #f0eaff;
+      margin: 4px 0 2px;
+    }
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background: rgba(168, 85, 247, 0.15);
+      border-radius: 10px;
+      margin-top: 6px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #a855f7, #c99bff);
+      border-radius: 10px;
+      width: 0%;
+    }
+    .habit-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(168, 85, 247, 0.06);
+    }
+    .habit-row input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: #a855f7;
+      cursor: pointer;
+    }
+    .habit-label {
+      font-size: 15px;
+      color: #d4ccf0;
+    }
+    .habit-label.done {
+      text-decoration: line-through;
+      color: #6f5f93;
+    }
+    .goal-title {
+      font-weight: 600;
+      font-size: 15px;
+      color: #f0eaff;
+    }
+    .goal-sub {
+      font-size: 12px;
+      color: #a89cc4;
+      margin-bottom: 2px;
+    }
+    .inline-edit {
+      background: transparent;
+      border: none;
+      color: #f0eaff;
+      font-weight: 700;
+      font-size: 16px;
+      width: 80px;
+      text-align: right;
+      font-family: inherit;
+    }
+    .inline-edit:focus {
+      outline: 1px solid rgba(168, 85, 247, 0.4);
+      border-radius: 6px;
+    }
+    .inline-edit.green {
+      color: #3ce88a;
+    }
+    .inline-edit.red {
+      color: #ff3b4e;
+    }
+    .inline-edit.violet {
+      color: #c99bff;
+    }
+    .small-btn {
+      background: rgba(168, 85, 247, 0.12);
+      border: none;
+      color: #c99bff;
+      padding: 2px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .small-btn:hover {
+      background: rgba(168, 85, 247, 0.25);
+    }
+    .footer {
+      text-align: center;
+      color: #5e5478;
+      font-size: 12px;
+      margin-top: 20px;
+    }
+    @media (max-width: 420px) {
+      body { padding: 12px; }
+      .total { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <h1>⚡ Balloutt Trades</h1>
+  <div class="sub">Personal Dashboard · <span id="dateDisplay"></span></div>
+
+  <!-- Net Worth -->
+  <div class="card">
+    <h2>Net Worth</h2>
+    <div class="total" id="netWorth">$0</div>
+    <div style="display:flex;gap:12px;margin-top:4px;font-size:13px;color:#a89cc4;">
+      <span>📈 Income: <strong id="totalIncome">$0</strong></span>
+      <span>📉 Expenses: <strong id="totalExpenses">$0</strong></span>
+    </div>
+  </div>
+
+  <!-- Income -->
+  <div class="card">
+    <h2>📊 Income</h2>
+    <div class="row"><span class="label">Trading P&L</span><input class="inline-edit green" id="trading" type="number" value="0" step="100"></div>
+    <div class="row"><span class="label">Mentorship</span><input class="inline-edit violet" id="mentorship" type="number" value="0" step="100"></div>
+    <div class="row"><span class="label">Alerts ($450/mo)</span><input class="inline-edit violet" id="alerts" type="number" value="0" step="50"></div>
+    <div class="row"><span class="label">Affiliates</span><input class="inline-edit violet" id="affiliates" type="number" value="0" step="50"></div>
+  </div>
+
+  <!-- Expenses -->
+  <div class="card">
+    <h2>💸 Expenses</h2>
+    <div class="row"><span class="label">Business Costs</span><input class="inline-edit red" id="expBusiness" type="number" value="0" step="50"></div>
+    <div class="row"><span class="label">Subscriptions</span><input class="inline-edit red" id="expSubs" type="number" value="0" step="20"></div>
+    <div class="row"><span class="label">Other</span><input class="inline-edit red" id="expOther" type="number" value="0" step="20"></div>
+  </div>
+
+  <!-- Goals -->
+  <div class="card">
+    <h2>🎯 Goals</h2>
+    <div style="margin-bottom:12px;">
+      <div class="goal-title">$10K Funded Account</div>
+      <div class="goal-sub">Strix</div>
+      <div class="progress-bar"><div class="progress-fill" id="goalStrix" style="width:0%;"></div></div>
+    </div>
+    <div>
+      <div class="goal-title">100 Members</div>
+      <div class="goal-sub">Community</div>
+      <div class="progress-bar"><div class="progress-fill" id="goalMembers" style="width:0%;"></div></div>
+    </div>
+  </div>
+
+  <!-- Habits -->
+  <div class="card">
+    <h2>✅ Daily Habits</h2>
+    <div class="habit-row"><input type="checkbox" id="h1"><label class="habit-label" for="h1">Check pre-market levels</label></div>
+    <div class="habit-row"><input type="checkbox" id="h2"><label class="habit-label" for="h2">Post watchlist</label></div>
+    <div class="habit-row"><input type="checkbox" id="h3"><label class="habit-label" for="h3">Trade review / journal</label></div>
+    <div class="habit-row"><input type="checkbox" id="h4"><label class="habit-label" for="h4">Check Strix / affiliate stats</label></div>
+  </div>
+
+  <div class="footer">© 2026 Balloutt Trades LLC · data stays on your device</div>
+</div>
+
+<script>
+  // Date
+  document.getElementById('dateDisplay').textContent = new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+
+  // Store values in localStorage so they persist
+  function save(key, val) { localStorage.setItem(key, val); }
+  function load(key, fallback) { return parseFloat(localStorage.getItem(key)) || fallback; }
+
+  // Load saved values
+  const ids = ['trading','mentorship','alerts','affiliates','expBusiness','expSubs','expOther'];
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = load(id, 0);
+  });
+
+  // Save on change
