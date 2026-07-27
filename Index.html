@@ -149,19 +149,6 @@
     .inline-edit.violet {
       color: #c99bff;
     }
-    .small-btn {
-      background: rgba(168, 85, 247, 0.12);
-      border: none;
-      color: #c99bff;
-      padding: 2px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      cursor: pointer;
-      font-family: inherit;
-    }
-    .small-btn:hover {
-      background: rgba(168, 85, 247, 0.25);
-    }
     .footer {
       text-align: center;
       color: #5e5478;
@@ -250,3 +237,51 @@
   });
 
   // Save on change
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('input', function() {
+        save(id, this.value);
+        updateTotals();
+      });
+    }
+  });
+
+  function updateTotals() {
+    const trading = parseFloat(document.getElementById('trading').value) || 0;
+    const mentorship = parseFloat(document.getElementById('mentorship').value) || 0;
+    const alerts = parseFloat(document.getElementById('alerts').value) || 0;
+    const affiliates = parseFloat(document.getElementById('affiliates').value) || 0;
+    const expBusiness = parseFloat(document.getElementById('expBusiness').value) || 0;
+    const expSubs = parseFloat(document.getElementById('expSubs').value) || 0;
+    const expOther = parseFloat(document.getElementById('expOther').value) || 0;
+
+    const totalIncome = trading + mentorship + alerts + affiliates;
+    const totalExpenses = expBusiness + expSubs + expOther;
+    const netWorth = totalIncome - totalExpenses;
+
+    document.getElementById('totalIncome').textContent = '$' + totalIncome.toLocaleString();
+    document.getElementById('totalExpenses').textContent = '$' + totalExpenses.toLocaleString();
+    document.getElementById('netWorth').textContent = '$' + netWorth.toLocaleString();
+  }
+
+  updateTotals();
+
+  // Goal progress — you can adjust these numbers manually
+  document.getElementById('goalStrix').style.width = '65%';
+  document.getElementById('goalMembers').style.width = '40%';
+
+  // Habit strikethrough
+  document.querySelectorAll('.habit-row input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', function() {
+      const label = this.nextElementSibling;
+      if (this.checked) {
+        label.classList.add('done');
+      } else {
+        label.classList.remove('done');
+      }
+    });
+  });
+</script>
+</body>
+</html>
