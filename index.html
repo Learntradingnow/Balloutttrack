@@ -47,39 +47,93 @@
       letter-spacing: 0.08em;
       color: #a89cc4;
       margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .card h2 .total-badge {
+      font-size: 14px;
+      color: #f0eaff;
     }
     .row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 6px 0;
+      padding: 4px 0;
       border-bottom: 1px solid rgba(168, 85, 247, 0.06);
     }
     .row:last-child {
       border-bottom: none;
     }
+    .row.sub-item {
+      padding-left: 16px;
+      font-size: 13px;
+    }
     .label {
       color: #d4ccf0;
-      font-size: 15px;
+      font-size: 14px;
+    }
+    .label.sub {
+      color: #a89cc4;
+      font-size: 13px;
     }
     .value {
       font-weight: 700;
-      font-size: 16px;
+      font-size: 15px;
     }
-    .value.green {
-      color: #3ce88a;
-    }
-    .value.red {
-      color: #ff3b4e;
-    }
-    .value.violet {
-      color: #c99bff;
-    }
+    .value.green { color: #3ce88a; }
+    .value.red { color: #ff3b4e; }
+    .value.violet { color: #c99bff; }
     .total {
       font-size: 32px;
       font-weight: 800;
       color: #f0eaff;
       margin: 4px 0 2px;
+    }
+    .inline-edit {
+      background: transparent;
+      border: none;
+      color: #f0eaff;
+      font-weight: 700;
+      font-size: 15px;
+      width: 80px;
+      text-align: right;
+      font-family: inherit;
+    }
+    .inline-edit:focus {
+      outline: 1px solid rgba(168, 85, 247, 0.4);
+      border-radius: 6px;
+    }
+    .inline-edit.green { color: #3ce88a; }
+    .inline-edit.red { color: #ff3b4e; }
+    .inline-edit.violet { color: #c99bff; }
+    .inline-edit.gold { color: #ffc93c; }
+    .inline-edit.small { width: 60px; font-size: 13px; }
+    .add-btn {
+      background: rgba(168, 85, 247, 0.1);
+      border: 1px dashed rgba(168, 85, 247, 0.3);
+      color: #a89cc4;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      cursor: pointer;
+      margin-top: 6px;
+      font-family: inherit;
+    }
+    .add-btn:hover {
+      background: rgba(168, 85, 247, 0.2);
+      border-color: rgba(168, 85, 247, 0.5);
+    }
+    .remove-btn {
+      background: transparent;
+      border: none;
+      color: #5e5478;
+      cursor: pointer;
+      font-size: 14px;
+      padding: 0 4px;
+    }
+    .remove-btn:hover {
+      color: #ff3b4e;
     }
     .progress-bar {
       width: 100%;
@@ -99,17 +153,17 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 8px 0;
+      padding: 6px 0;
       border-bottom: 1px solid rgba(168, 85, 247, 0.06);
     }
     .habit-row input[type="checkbox"] {
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       accent-color: #a855f7;
       cursor: pointer;
     }
     .habit-label {
-      font-size: 15px;
+      font-size: 14px;
       color: #d4ccf0;
     }
     .habit-label.done {
@@ -126,29 +180,6 @@
       color: #a89cc4;
       margin-bottom: 2px;
     }
-    .inline-edit {
-      background: transparent;
-      border: none;
-      color: #f0eaff;
-      font-weight: 700;
-      font-size: 16px;
-      width: 80px;
-      text-align: right;
-      font-family: inherit;
-    }
-    .inline-edit:focus {
-      outline: 1px solid rgba(168, 85, 247, 0.4);
-      border-radius: 6px;
-    }
-    .inline-edit.green {
-      color: #3ce88a;
-    }
-    .inline-edit.red {
-      color: #ff3b4e;
-    }
-    .inline-edit.violet {
-      color: #c99bff;
-    }
     .footer {
       text-align: center;
       color: #5e5478;
@@ -158,6 +189,7 @@
     @media (max-width: 420px) {
       body { padding: 12px; }
       .total { font-size: 28px; }
+      .row { flex-wrap: wrap; gap: 4px; }
     }
   </style>
 </head>
@@ -179,109 +211,255 @@
 
   <!-- Income -->
   <div class="card">
-    <h2>📊 Income</h2>
-    <div class="row"><span class="label">Trading P&L</span><input class="inline-edit green" id="trading" type="number" value="0" step="100"></div>
-    <div class="row"><span class="label">Mentorship</span><input class="inline-edit violet" id="mentorship" type="number" value="0" step="100"></div>
-    <div class="row"><span class="label">Alerts ($450/mo)</span><input class="inline-edit violet" id="alerts" type="number" value="0" step="50"></div>
-    <div class="row"><span class="label">Affiliates</span><input class="inline-edit violet" id="affiliates" type="number" value="0" step="50"></div>
+    <h2>📊 Income <span class="total-badge" id="incomeTotal">$0</span></h2>
+    <div id="incomeList"></div>
+    <button class="add-btn" onclick="addIncomeItem()">+ Add Income</button>
   </div>
 
   <!-- Expenses -->
   <div class="card">
-    <h2>💸 Expenses</h2>
-    <div class="row"><span class="label">Business Costs</span><input class="inline-edit red" id="expBusiness" type="number" value="0" step="50"></div>
-    <div class="row"><span class="label">Subscriptions</span><input class="inline-edit red" id="expSubs" type="number" value="0" step="20"></div>
-    <div class="row"><span class="label">Other</span><input class="inline-edit red" id="expOther" type="number" value="0" step="20"></div>
+    <h2>💸 Expenses <span class="total-badge" id="expenseTotal">$0</span></h2>
+    <div id="expenseList"></div>
+    <button class="add-btn" onclick="addExpenseItem()">+ Add Expense</button>
   </div>
 
   <!-- Goals -->
   <div class="card">
     <h2>🎯 Goals</h2>
-    <div style="margin-bottom:12px;">
-      <div class="goal-title">$10K Funded Account</div>
-      <div class="goal-sub">Strix</div>
-      <div class="progress-bar"><div class="progress-fill" id="goalStrix" style="width:0%;"></div></div>
-    </div>
-    <div>
-      <div class="goal-title">100 Members</div>
-      <div class="goal-sub">Community</div>
-      <div class="progress-bar"><div class="progress-fill" id="goalMembers" style="width:0%;"></div></div>
-    </div>
+    <div id="goalList"></div>
+    <button class="add-btn" onclick="addGoal()">+ Add Goal</button>
   </div>
 
   <!-- Habits -->
   <div class="card">
     <h2>✅ Daily Habits</h2>
-    <div class="habit-row"><input type="checkbox" id="h1"><label class="habit-label" for="h1">Check pre-market levels</label></div>
-    <div class="habit-row"><input type="checkbox" id="h2"><label class="habit-label" for="h2">Post watchlist</label></div>
-    <div class="habit-row"><input type="checkbox" id="h3"><label class="habit-label" for="h3">Trade review / journal</label></div>
-    <div class="habit-row"><input type="checkbox" id="h4"><label class="habit-label" for="h4">Check Strix / affiliate stats</label></div>
+    <div id="habitList"></div>
+    <button class="add-btn" onclick="addHabit()">+ Add Habit</button>
   </div>
 
   <div class="footer">© 2026 Balloutt Trades LLC · data stays on your device</div>
 </div>
 
 <script>
-  // Date
-  document.getElementById('dateDisplay').textContent = new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+  // ===== DATA =====
+  let data = {
+    income: [
+      { id: 'i1', label: 'Trading P&L', amount: 0 },
+      { id: 'i2', label: 'Mentorship', amount: 0 },
+      { id: 'i3', label: 'Alerts ($450/mo)', amount: 0 },
+      { id: 'i4', label: 'Affiliates', amount: 0 }
+    ],
+    expenses: [
+      { id: 'e1', label: 'Business Costs', amount: 0 },
+      { id: 'e2', label: 'Subscriptions', amount: 0 },
+      { id: 'e3', label: 'Other', amount: 0 }
+    ],
+    goals: [
+      { id: 'g1', label: '$10K Funded Account', sub: 'Strix', progress: 65 },
+      { id: 'g2', label: '100 Members', sub: 'Community', progress: 40 }
+    ],
+    habits: [
+      { id: 'h1', label: 'Check pre-market levels', done: false },
+      { id: 'h2', label: 'Post watchlist', done: false },
+      { id: 'h3', label: 'Trade review / journal', done: false },
+      { id: 'h4', label: 'Check Strix / affiliate stats', done: false }
+    ]
+  };
 
-  // Store values in localStorage so they persist
-  function save(key, val) { localStorage.setItem(key, val); }
-  function load(key, fallback) { return parseFloat(localStorage.getItem(key)) || fallback; }
+  let idCounter = 100;
 
-  // Load saved values
-  const ids = ['trading','mentorship','alerts','affiliates','expBusiness','expSubs','expOther'];
-  ids.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = load(id, 0);
-  });
-
-  // Save on change
-  ids.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.addEventListener('input', function() {
-        save(id, this.value);
-        updateTotals();
-      });
-    }
-  });
-
-  function updateTotals() {
-    const trading = parseFloat(document.getElementById('trading').value) || 0;
-    const mentorship = parseFloat(document.getElementById('mentorship').value) || 0;
-    const alerts = parseFloat(document.getElementById('alerts').value) || 0;
-    const affiliates = parseFloat(document.getElementById('affiliates').value) || 0;
-    const expBusiness = parseFloat(document.getElementById('expBusiness').value) || 0;
-    const expSubs = parseFloat(document.getElementById('expSubs').value) || 0;
-    const expOther = parseFloat(document.getElementById('expOther').value) || 0;
-
-    const totalIncome = trading + mentorship + alerts + affiliates;
-    const totalExpenses = expBusiness + expSubs + expOther;
-    const netWorth = totalIncome - totalExpenses;
-
-    document.getElementById('totalIncome').textContent = '$' + totalIncome.toLocaleString();
-    document.getElementById('totalExpenses').textContent = '$' + totalExpenses.toLocaleString();
-    document.getElementById('netWorth').textContent = '$' + netWorth.toLocaleString();
+  // ===== LOAD / SAVE =====
+  function loadData() {
+    try {
+      const saved = localStorage.getItem('balloutt_dashboard');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        // Merge with defaults to handle new fields
+        data.income = parsed.income || data.income;
+        data.expenses = parsed.expenses || data.expenses;
+        data.goals = parsed.goals || data.goals;
+        data.habits = parsed.habits || data.habits;
+      }
+    } catch (e) {}
   }
 
-  updateTotals();
+  function saveData() {
+    localStorage.setItem('balloutt_dashboard', JSON.stringify(data));
+  }
 
-  // Goal progress — you can adjust these numbers manually
-  document.getElementById('goalStrix').style.width = '65%';
-  document.getElementById('goalMembers').style.width = '40%';
+  // ===== RENDER =====
+  function render() {
+    renderIncome();
+    renderExpenses();
+    renderGoals();
+    renderHabits();
+    updateTotals();
+  }
 
-  // Habit strikethrough
-  document.querySelectorAll('.habit-row input[type="checkbox"]').forEach(cb => {
-    cb.addEventListener('change', function() {
-      const label = this.nextElementSibling;
-      if (this.checked) {
-        label.classList.add('done');
-      } else {
-        label.classList.remove('done');
-      }
+  function renderIncome() {
+    const container = document.getElementById('incomeList');
+    container.innerHTML = '';
+    data.income.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'row';
+      div.innerHTML = `
+        <span class="label">${item.label}</span>
+        <input class="inline-edit green" type="number" value="${item.amount}" 
+               data-id="${item.id}" data-type="income" step="50"
+               onchange="updateAmount(this, 'income')">
+      `;
+      container.appendChild(div);
     });
-  });
+  }
+
+  function renderExpenses() {
+    const container = document.getElementById('expenseList');
+    container.innerHTML = '';
+    data.expenses.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'row';
+      div.innerHTML = `
+        <span class="label">${item.label}</span>
+        <input class="inline-edit red" type="number" value="${item.amount}" 
+               data-id="${item.id}" data-type="expense" step="20"
+               onchange="updateAmount(this, 'expense')">
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  function renderGoals() {
+    const container = document.getElementById('goalList');
+    container.innerHTML = '';
+    data.goals.forEach(item => {
+      const div = document.createElement('div');
+      div.style.marginBottom = '12px';
+      div.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div class="goal-title">${item.label}</div>
+            <div class="goal-sub">${item.sub}</div>
+          </div>
+          <input class="inline-edit gold small" type="number" value="${item.progress}" 
+                 data-id="${item.id}" data-type="goal" step="5" style="width:50px;"
+                 onchange="updateGoalProgress(this)">
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width:${item.progress}%;"></div>
+        </div>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  function renderHabits() {
+    const container = document.getElementById('habitList');
+    container.innerHTML = '';
+    data.habits.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'habit-row';
+      div.innerHTML = `
+        <input type="checkbox" ${item.done ? 'checked' : ''} 
+               data-id="${item.id}" onchange="toggleHabit(this)">
+        <label class="habit-label ${item.done ? 'done' : ''}">${item.label}</label>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  // ===== UPDATE FUNCTIONS =====
+  function updateAmount(input, type) {
+    const id = input.dataset.id;
+    const value = parseFloat(input.value) || 0;
+    const list = type === 'income' ? data.income : data.expenses;
+    const item = list.find(i => i.id === id);
+    if (item) {
+      item.amount = value;
+      saveData();
+      updateTotals();
+      renderIncome();
+      renderExpenses();
+    }
+  }
+
+  function updateGoalProgress(input) {
+    const id = input.dataset.id;
+    const value = parseFloat(input.value) || 0;
+    const item = data.goals.find(g => g.id === id);
+    if (item) {
+      item.progress = Math.min(100, Math.max(0, value));
+      saveData();
+      renderGoals();
+    }
+  }
+
+  function toggleHabit(checkbox) {
+    const id = checkbox.dataset.id;
+    const item = data.habits.find(h => h.id === id);
+    if (item) {
+      item.done = checkbox.checked;
+      saveData();
+      renderHabits();
+    }
+  }
+
+  function updateTotals() {
+    const incomeTotal = data.income.reduce((sum, i) => sum + i.amount, 0);
+    const expenseTotal = data.expenses.reduce((sum, e) => sum + e.amount, 0);
+    const netWorth = incomeTotal - expenseTotal;
+
+    document.getElementById('totalIncome').textContent = '$' + incomeTotal.toLocaleString();
+    document.getElementById('totalExpenses').textContent = '$' + expenseTotal.toLocaleString();
+    document.getElementById('netWorth').textContent = '$' + netWorth.toLocaleString();
+    document.getElementById('incomeTotal').textContent = '$' + incomeTotal.toLocaleString();
+    document.getElementById('expenseTotal').textContent = '$' + expenseTotal.toLocaleString();
+  }
+
+  // ===== ADD ITEMS =====
+  function addIncomeItem() {
+    const label = prompt('Income source name:');
+    if (label && label.trim()) {
+      data.income.push({ id: 'i' + (++idCounter), label: label.trim(), amount: 0 });
+      saveData();
+      render();
+    }
+  }
+
+  function addExpenseItem() {
+    const label = prompt('Expense name:');
+    if (label && label.trim()) {
+      data.expenses.push({ id: 'e' + (++idCounter), label: label.trim(), amount: 0 });
+      saveData();
+      render();
+    }
+  }
+
+  function addGoal() {
+    const label = prompt('Goal name:');
+    if (!label || !label.trim()) return;
+    const sub = prompt('Subtitle (e.g., Strix, Community):') || '';
+    data.goals.push({ id: 'g' + (++idCounter), label: label.trim(), sub: sub, progress: 0 });
+    saveData();
+    render();
+  }
+
+  function addHabit() {
+    const label = prompt('Habit name:');
+    if (label && label.trim()) {
+      data.habits.push({ id: 'h' + (++idCounter), label: label.trim(), done: false });
+      saveData();
+      render();
+    }
+  }
+
+  // ===== INIT =====
+  document.getElementById('dateDisplay').textContent = new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+
+  loadData();
+  render();
+
+  // Auto-save on page unload
+  window.addEventListener('beforeunload', saveData);
 </script>
 </body>
 </html>
