@@ -3,13 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Balloutt Trades — Dashboard</title>
+  <title>Balloutt Trades — Smart Dashboard</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Inter', system-ui, sans-serif;
       background: #0d0131;
@@ -19,21 +15,9 @@
       display: flex;
       justify-content: center;
     }
-    .container {
-      max-width: 500px;
-      width: 100%;
-    }
-    h1 {
-      font-size: 24px;
-      font-weight: 700;
-      margin-bottom: 4px;
-      color: #c99bff;
-    }
-    .sub {
-      color: #a89cc4;
-      font-size: 14px;
-      margin-bottom: 24px;
-    }
+    .container { max-width: 500px; width: 100%; }
+    h1 { font-size: 24px; font-weight: 700; margin-bottom: 4px; color: #c99bff; }
+    .sub { color: #a89cc4; font-size: 14px; margin-bottom: 24px; }
     .card {
       background: rgba(168, 85, 247, 0.06);
       border: 1px solid rgba(168, 85, 247, 0.15);
@@ -51,10 +35,7 @@
       justify-content: space-between;
       align-items: center;
     }
-    .card h2 .total-badge {
-      font-size: 14px;
-      color: #f0eaff;
-    }
+    .card h2 .total-badge { font-size: 14px; color: #f0eaff; }
     .row {
       display: flex;
       justify-content: space-between;
@@ -62,34 +43,8 @@
       padding: 4px 0;
       border-bottom: 1px solid rgba(168, 85, 247, 0.06);
     }
-    .row:last-child {
-      border-bottom: none;
-    }
-    .row.sub-item {
-      padding-left: 16px;
-      font-size: 13px;
-    }
-    .label {
-      color: #d4ccf0;
-      font-size: 14px;
-    }
-    .label.sub {
-      color: #a89cc4;
-      font-size: 13px;
-    }
-    .value {
-      font-weight: 700;
-      font-size: 15px;
-    }
-    .value.green { color: #3ce88a; }
-    .value.red { color: #ff3b4e; }
-    .value.violet { color: #c99bff; }
-    .total {
-      font-size: 32px;
-      font-weight: 800;
-      color: #f0eaff;
-      margin: 4px 0 2px;
-    }
+    .row:last-child { border-bottom: none; }
+    .label { color: #d4ccf0; font-size: 14px; }
     .inline-edit {
       background: transparent;
       border: none;
@@ -100,15 +55,18 @@
       text-align: right;
       font-family: inherit;
     }
-    .inline-edit:focus {
-      outline: 1px solid rgba(168, 85, 247, 0.4);
-      border-radius: 6px;
-    }
+    .inline-edit:focus { outline: 1px solid rgba(168, 85, 247, 0.4); border-radius: 6px; }
     .inline-edit.green { color: #3ce88a; }
     .inline-edit.red { color: #ff3b4e; }
     .inline-edit.violet { color: #c99bff; }
     .inline-edit.gold { color: #ffc93c; }
     .inline-edit.small { width: 60px; font-size: 13px; }
+    .total {
+      font-size: 32px;
+      font-weight: 800;
+      color: #f0eaff;
+      margin: 4px 0 2px;
+    }
     .add-btn {
       background: rgba(168, 85, 247, 0.1);
       border: 1px dashed rgba(168, 85, 247, 0.3);
@@ -120,21 +78,7 @@
       margin-top: 6px;
       font-family: inherit;
     }
-    .add-btn:hover {
-      background: rgba(168, 85, 247, 0.2);
-      border-color: rgba(168, 85, 247, 0.5);
-    }
-    .remove-btn {
-      background: transparent;
-      border: none;
-      color: #5e5478;
-      cursor: pointer;
-      font-size: 14px;
-      padding: 0 4px;
-    }
-    .remove-btn:hover {
-      color: #ff3b4e;
-    }
+    .add-btn:hover { background: rgba(168, 85, 247, 0.2); border-color: rgba(168, 85, 247, 0.5); }
     .progress-bar {
       width: 100%;
       height: 6px;
@@ -156,48 +100,79 @@
       padding: 6px 0;
       border-bottom: 1px solid rgba(168, 85, 247, 0.06);
     }
-    .habit-row input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      accent-color: #a855f7;
-      cursor: pointer;
+    .habit-row input[type="checkbox"] { width: 18px; height: 18px; accent-color: #a855f7; cursor: pointer; }
+    .habit-label { font-size: 14px; color: #d4ccf0; }
+    .habit-label.done { text-decoration: line-through; color: #6f5f93; }
+    .goal-title { font-weight: 600; font-size: 15px; color: #f0eaff; }
+    .goal-sub { font-size: 12px; color: #a89cc4; margin-bottom: 2px; }
+
+    /* Smart AI Chat */
+    .chat-box {
+      background: rgba(168, 85, 247, 0.04);
+      border: 1px solid rgba(168, 85, 247, 0.12);
+      border-radius: 14px;
+      padding: 12px 14px;
+      max-height: 280px;
+      overflow-y: auto;
+      margin-bottom: 10px;
+      font-size: 13px;
+      line-height: 1.6;
+      min-height: 60px;
     }
-    .habit-label {
-      font-size: 14px;
-      color: #d4ccf0;
+    .chat-box .bot { color: #c99bff; }
+    .chat-box .user { color: #3ce88a; }
+    .chat-box .insight { color: #ffc93c; }
+    .chat-input-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
     }
-    .habit-label.done {
-      text-decoration: line-through;
-      color: #6f5f93;
-    }
-    .goal-title {
-      font-weight: 600;
-      font-size: 15px;
+    .chat-input-row input {
+      flex: 1;
+      background: rgba(168, 85, 247, 0.06);
+      border: 1px solid rgba(168, 85, 247, 0.15);
+      border-radius: 999px;
+      padding: 8px 14px;
       color: #f0eaff;
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
     }
-    .goal-sub {
-      font-size: 12px;
-      color: #a89cc4;
-      margin-bottom: 2px;
+    .chat-input-row input:focus { border-color: rgba(168, 85, 247, 0.4); }
+    .chat-input-row button {
+      background: linear-gradient(135deg, #a855f7, #7c3aed);
+      border: none;
+      color: #fff;
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      font-family: inherit;
     }
-    .footer {
-      text-align: center;
-      color: #5e5478;
-      font-size: 12px;
-      margin-top: 20px;
+    .chat-input-row button:hover { filter: brightness(1.1); }
+    .insight-btn {
+      background: rgba(255, 201, 60, 0.12);
+      border: 1px solid rgba(255, 201, 60, 0.2);
+      color: #ffc93c;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 10px;
+      cursor: pointer;
+      font-family: inherit;
+      margin: 4px 2px 0 0;
     }
-    @media (max-width: 420px) {
-      body { padding: 12px; }
-      .total { font-size: 28px; }
-      .row { flex-wrap: wrap; gap: 4px; }
-    }
+    .insight-btn:hover { background: rgba(255, 201, 60, 0.2); }
+
+    .footer { text-align: center; color: #5e5478; font-size: 12px; margin-top: 20px; }
+    @media (max-width: 420px) { body { padding: 12px; } .total { font-size: 28px; } }
   </style>
 </head>
 <body>
 <div class="container">
 
   <h1>⚡ Balloutt Trades</h1>
-  <div class="sub">Personal Dashboard · <span id="dateDisplay"></span></div>
+  <div class="sub">Smart Dashboard · <span id="dateDisplay"></span></div>
 
   <!-- Net Worth -->
   <div class="card">
@@ -237,6 +212,25 @@
     <button class="add-btn" onclick="addHabit()">+ Add Habit</button>
   </div>
 
+  <!-- Smart AI Assistant -->
+  <div class="card" style="border-color: rgba(168,85,247,0.3);">
+    <h2>🧠 Smart AI</h2>
+    <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px;">
+      <button class="insight-btn" onclick="quickAsk('insight')">💡 Insight</button>
+      <button class="insight-btn" onclick="quickAsk('trade')">📊 Trade</button>
+      <button class="insight-btn" onclick="quickAsk('goals')">🎯 Goals</button>
+      <button class="insight-btn" onclick="quickAsk('habits')">✅ Habits</button>
+      <button class="insight-btn" onclick="quickAsk('motivate')">🔥 Push</button>
+    </div>
+    <div class="chat-box" id="chatBox">
+      <div class="bot">💬 I'm your smart AI. Ask me anything — trading, goals, habits, or insights.</div>
+    </div>
+    <div class="chat-input-row">
+      <input type="text" id="chatInput" placeholder="Ask me anything..." onkeydown="if(event.key==='Enter') sendChat()">
+      <button onclick="sendChat()">Ask</button>
+    </div>
+  </div>
+
   <div class="footer">© 2026 Balloutt Trades LLC · data stays on your device</div>
 </div>
 
@@ -274,7 +268,6 @@
       const saved = localStorage.getItem('balloutt_dashboard');
       if (saved) {
         const parsed = JSON.parse(saved);
-        // Merge with defaults to handle new fields
         data.income = parsed.income || data.income;
         data.expenses = parsed.expenses || data.expenses;
         data.goals = parsed.goals || data.goals;
@@ -452,13 +445,105 @@
     }
   }
 
+  // ===== SMART AI ASSISTANT =====
+  function getSnapshot() {
+    const incomeTotal = data.income.reduce((s, i) => s + i.amount, 0);
+    const expenseTotal = data.expenses.reduce((s, e) => s + e.amount, 0);
+    const habitsDone = data.habits.filter(h => h.done).length;
+    const totalHabits = data.habits.length;
+    const strix = data.goals.find(g => g.label.includes('Strix'));
+    const members = data.goals.find(g => g.label.includes('Members'));
+    return { incomeTotal, expenseTotal, habitsDone, totalHabits, strix, members };
+  }
+
+  function sendChat() {
+    const input = document.getElementById('chatInput');
+    const msg = input.value.trim();
+    if (!msg) return;
+    input.value = '';
+
+    const chatBox = document.getElementById('chatBox');
+    chatBox.innerHTML += `<div class="user">🧑 You: ${msg}</div>`;
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    const reply = getSmartReply(msg);
+    setTimeout(() => {
+      chatBox.innerHTML += `<div class="bot">🤖 ${reply}</div>`;
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }, 300);
+  }
+
+  function quickAsk(type) {
+    const prompts = {
+      insight: 'Give me a quick insight on my numbers.',
+      trade: 'What should I focus on for trading today?',
+      goals: 'How am I doing on my goals?',
+      habits: 'How are my habits looking?',
+      motivate: 'Give me a push — I need motivation.'
+    };
+    document.getElementById('chatInput').value = prompts[type] || 'Help me.';
+    sendChat();
+  }
+
+  function getSmartReply(msg) {
+    const lower = msg.toLowerCase();
+    const snap = getSnapshot();
+
+    // --- Quick insight ---
+    if (lower.includes('insight') || lower.includes('numbers') || lower.includes('overview')) {
+      return `📊 Snapshot:\n- Income: $${snap.incomeTotal.toLocaleString()}\n- Expenses: $${snap.expenseTotal.toLocaleString()}\n- Net Worth: $${(snap.incomeTotal - snap.expenseTotal).toLocaleString()}\n- Habits: ${snap.habitsDone}/${snap.totalHabits} done\n- Strix Goal: ${snap.strix ? snap.strix.progress + '%' : 'N/A'}`;
+    }
+
+    // --- Trading advice ---
+    if (lower.includes('trade') || lower.includes('market') || lower.includes('focus')) {
+      return '📈 Watch TSLA at $398 support, SPY at $734. Volume confirmation is key. Size small, stick to stops. Remember: green day starts with a plan.';
+    }
+
+    // --- Goals ---
+    if (lower.includes('goal') || lower.includes('progress') || lower.includes('strix') || lower.includes('members')) {
+      let r = '🎯 Goal Progress:\n';
+      if (snap.strix) r += `- Strix Funded: ${snap.strix.progress}%\n`;
+      if (snap.members) r += `- Community Members: ${snap.members.progress}%\n`;
+      r += snap.strix && snap.strix.progress > 80 ? '🔥 Almost there! Keep pushing.' : '💪 Every step counts. You got this.';
+      return r;
+    }
+
+    // --- Habits ---
+    if (lower.includes('habit') || lower.includes('routine') || lower.includes('daily')) {
+      const done = data.habits.filter(h => h.done);
+      const left = data.habits.filter(h => !h.done);
+      let r = `✅ Habits: ${done.length}/${data.habits.length} done\n`;
+      if (left.length > 0) r += `⏳ Left to do: ${left.map(h => h.label).join(', ')}`;
+      else r += '🔥 All done! You\'re crushing it today.';
+      return r;
+    }
+
+    // --- Motivation ---
+    if (lower.includes('motivate') || lower.includes('push') || lower.includes('burnout') || lower.includes('tired')) {
+      return '🔥 You\'ve built more in months than most do in years. A trading brand, bot system, Strix partnership, premium site — and you\'re still grinding. Rest if you need, but never quit. You\'re closer than you think.';
+    }
+
+    // --- Risk management ---
+    if (lower.includes('risk') || lower.includes('stop') || lower.includes('size')) {
+      return '📉 Risk per trade: 1-2% of account. Always set a stop loss. Size small, hold runners, cut losers. That\'s how you survive and thrive.';
+    }
+
+    // --- Affiliates / Strix ---
+    if (lower.includes('affiliate') || lower.includes('commission') || lower.includes('strix') || lower.includes('funded')) {
+      const aff = data.income.find(i => i.label.includes('Affiliates'));
+      const amt = aff ? aff.amount : 0;
+      return `💵 Affiliate income: $${amt.toLocaleString()}\nStrix is your best source — keep promoting your link and code BTLLC. Every sign-up compounds.`;
+    }
+
+    // --- Help / General ---
+    return '💡 I can help with:\n- "Insight" — snapshot of your numbers\n- "Trade" — market focus\n- "Goals" — progress update\n- "Habits" — daily routine check\n- "Motivate" — push when you need it\n- "Risk" — risk management tips\n- "Affiliates" — income breakdown';
+  }
+
   // ===== INIT =====
   document.getElementById('dateDisplay').textContent = new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
 
   loadData();
   render();
-
-  // Auto-save on page unload
   window.addEventListener('beforeunload', saveData);
 </script>
 </body>
