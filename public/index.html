@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Balloutt Trades — Ledger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div class="ticker-wrap" id="ticker-wrap">
+  <div class="ticker" id="ticker"></div>
+</div>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-mark">⚡</span>
+      <span class="brand-name">BALLOUTT TRADES</span>
+    </div>
+    <nav class="nav">
+      <button class="nav-item active" data-view="dashboard">Dashboard</button>
+      <button class="nav-item" data-view="trades">Trades</button>
+      <button class="nav-item" data-view="income">Income</button>
+      <button class="nav-item" data-view="goals">Goals</button>
+      <button class="nav-item" data-view="habits">Habits</button>
+      <button class="nav-item" data-view="personal">Personal</button>
+      <button class="nav-item" data-view="business">Business</button>
+      <button class="nav-item" data-view="ai">🧠 Smart AI</button>
+    </nav>
+    <div class="sidebar-footer">
+      <label class="code-label" for="access-code">Access code</label>
+      <input id="access-code" class="code-input" type="password" placeholder="optional" />
+      <span class="hint">Set ACCESS_CODE on the server to lock this.</span>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <!-- DASHBOARD -->
+    <section class="view active" id="view-dashboard">
+      <header class="view-header">
+        <h1>Dashboard</h1>
+        <p class="sub">Everything net, at a glance.</p>
+      </header>
+      <div class="cards" id="summary-cards"></div>
+      <div class="grid-2">
+        <div class="panel">
+          <h2>Recent trades</h2>
+          <div id="recent-trades" class="list"></div>
+        </div>
+        <div class="panel">
+          <h2>Goals in progress</h2>
+          <div id="dash-goals" class="list"></div>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>Latest journal entries</h2>
+        <div id="dash-journal" class="list"></div>
+      </div>
+    </section>
+
+    <!-- TRADES -->
+    <section class="view" id="view-trades">
+      <header class="view-header">
+        <h1>Trades</h1>
+        <p class="sub">Every position, entry to exit.</p>
+      </header>
+      <form class="entry-form" id="form-trades">
+        <input type="hidden" name="id" />
+        <div class="field"><label>Date</label><input type="date" name="date" required /></div>
+        <div class="field"><label>Symbol</label><input type="text" name="symbol" placeholder="AAPL, BTC, ES..." required /></div>
+        <div class="field"><label>Side</label>
+          <select name="side"><option value="long">Long</option><option value="short">Short</option></select>
+        </div>
+        <div class="field"><label>Size</label><input type="number" step="any" name="size" placeholder="units / contracts" /></div>
+        <div class="field"><label>Entry</label><input type="number" step="any" name="entry" placeholder="entry price" /></div>
+        <div class="field"><label>Exit</label><input type="number" step="any" name="exit" placeholder="exit price" /></div>
+        <div class="field"><label>P&L ($)</label><input type="number" step="any" name="pnl" placeholder="net result" required /></div>
+        <div class="field wide"><label>Notes</label><input type="text" name="notes" placeholder="setup, mistakes, lessons" /></div>
+        <button type="submit" class="btn-primary">Log trade</button>
+        <button type="button" class="btn-cancel" style="display:none">Cancel edit</button>
+      </form>
+      <table class="table" id="table-trades">
+        <thead><tr><th>Date</th><th>Symbol</th><th>Side</th><th>Size</th><th>Entry</th><th>Exit</th><th>P&L</th><th>Notes</th><th></th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <!-- INCOME -->
+    <section class="view" id="view-income">
+      <header class="view-header">
+        <h1>Income & Expenses</h1>
+        <p class="sub">Money moving, tagged by where it belongs.</p>
+      </header>
+      <form class="entry-form" id="form-income">
+        <input type="hidden" name="id" />
+        <div class="field"><label>Date</label><input type="date" name="date" required /></div>
+        <div class="field"><label>Category</label>
+          <select name="category"><option value="trading">Trading</option><option value="business">Business</option><option value="personal">Personal</option></select>
+        </div>
+        <div class="field"><label>Type</label>
+          <select name="type"><option value="income">Income</option><option value="expense">Expense</option></select>
+        </div>
+        <div class="field"><label>Amount ($)</label><input type="number" step="any" name="amount" required /></div>
+        <div class="field"><label>Source</label><input type="text" name="source" placeholder="client, salary, prop firm..." /></div>
+        <div class="field wide"><label>Notes</label><input type="text" name="notes" /></div>
+        <button type="submit" class="btn-primary">Add entry</button>
+        <button type="button" class="btn-cancel" style="display:none">Cancel edit</button>
+      </form>
+      <table class="table" id="table-income">
+        <thead><tr><th>Date</th><th>Category</th><th>Type</th><th>Amount</th><th>Source</th><th>Notes</th><th></th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <!-- GOALS -->
+    <section class="view" id="view-goals">
+      <header class="view-header">
+        <h1>Goals</h1>
+        <p class="sub">Targets across trading, business and life.</p>
+      </header>
+      <form class="entry-form" id="form-goals">
+        <input type="hidden" name="id" />
+        <div class="field wide"><label>Title</label><input type="text" name="title" required /></div>
+        <div class="field"><label>Category</label>
+          <select name="category"><option value="trading">Trading</option><option value="business">Business</option><option value="personal">Personal</option></select>
+        </div>
+        <div class="field"><label>Target</label><input type="number" step="any" name="target" required /></div>
+        <div class="field"><label>Current</label><input type="number" step="any" name="current" value="0" /></div>
+        <div class="field"><label>Unit</label><input type="text" name="unit" placeholder="$, %, trades, lbs..." /></div>
+        <div class="field"><label>Deadline</label><input type="date" name="deadline" /></div>
+        <div class="field"><label>Status</label>
+          <select name="status"><option value="active">Active</option><option value="done">Done</option><option value="paused">Paused</option></select>
+        </div>
+        <div class="field wide"><label>Notes</label><input type="text" name="notes" /></div>
+        <button type="submit" class="btn-primary">Add goal</button>
+        <button type="button" class="btn-cancel" style="display:none">Cancel edit</button>
+      </form>
+      <div class="goal-cards" id="goal-cards"></div>
+    </section>
+
+    <!-- PERSONAL -->
+    <section class="view" id="view-personal">
+      <header class="view-header">
+        <h1>Personal</h1>
+        <p class="sub">Life outside the charts.</p>
+      </header>
+      <form class="entry-form" id="form-personal">
+        <input type="hidden" name="id" />
+        <input type="hidden" name="category" value="personal" />
+        <div class="field"><label>Date</label><input type="date" name="date" required /></div>
+        <div class="field wide"><label>Title</label><input type="text" name="title" required /></div>
+        <div class="field full"><label>Entry</label><textarea name="content" rows="3"></textarea></div>
+        <button type="submit" class="btn-primary">Add entry</button>
+        <button type="button" class="btn-cancel" style="display:none">Cancel edit</button>
+      </form>
+      <div class="list" id="list-personal"></div>
+    </section>
+
+    <!-- BUSINESS -->
+    <section class="view" id="view-business">
+      <header class="view-header">
+        <h1>Business</h1>
+        <p class="sub">The venture side of the ledger.</p>
+      </header>
+      <form class="entry-form" id="form-business">
+        <input type="hidden" name="id" />
+        <input type="hidden" name="category" value="business" />
+        <div class="field"><label>Date</label><input type="date" name="date" required /></div>
+        <div class="field wide"><label>Title</label><input type="text" name="title" required /></div>
+        <div class="field full"><label>Entry</label><textarea name="content" rows="3"></textarea></div>
+        <button type="submit" class="btn-primary">Add entry</button>
+        <button type="button" class="btn-cancel" style="display:none">Cancel edit</button>
+      </form>
+      <div class="list" id="list-business"></div>
+    </section>
+
+    <!-- HABITS -->
+    <section class="view" id="view-habits">
+      <header class="view-header">
+        <h1>Daily Habits</h1>
+        <p class="sub">The routine that compounds. Check them off as you go.</p>
+      </header>
+      <form class="entry-form" id="form-habits">
+        <input type="hidden" name="id" />
+        <div class="field wide"><label>Habit</label><input type="text" name="label" placeholder="Check pre-market levels..." required /></div>
+        <button type="submit" class="btn-primary">Add habit</button>
+        <button type="button" class="btn-cancel" style="display:none">Cancel edit</button>
+      </form>
+      <div class="panel">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+          <h2 style="margin:0;">Today's checklist</h2>
+          <button class="btn-cancel" id="reset-habits-btn">Reset all for new day</button>
+        </div>
+        <div id="habit-list" class="list"></div>
+      </div>
+    </section>
+
+    <!-- SMART AI -->
+    <section class="view" id="view-ai">
+      <header class="view-header">
+        <h1>🧠 Smart AI</h1>
+        <p class="sub">Reads your real numbers below — no invented prices, no fake calls.</p>
+      </header>
+      <div class="panel">
+        <div class="quick-asks">
+          <button class="btn-cancel quick-ask" data-prompt="Give me a quick insight on my numbers.">💡 Insight</button>
+          <button class="btn-cancel quick-ask" data-prompt="What should I focus on with my trading based on my history?">📊 Trade review</button>
+          <button class="btn-cancel quick-ask" data-prompt="How am I doing on my goals?">🎯 Goals</button>
+          <button class="btn-cancel quick-ask" data-prompt="How are my habits looking today?">✅ Habits</button>
+          <button class="btn-cancel quick-ask" data-prompt="Give me a push — I need motivation.">🔥 Motivate</button>
+        </div>
+        <div class="chat-box" id="chat-box">
+          <div class="chat-line bot">I'm Smart AI. I read your real trades, income, goals and habits — ask me anything about them.</div>
+        </div>
+        <form class="chat-input-row" id="chat-form">
+          <input type="text" id="chat-input" placeholder="Ask about your numbers, goals, habits..." autocomplete="off" />
+          <button type="submit" class="btn-primary">Ask</button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

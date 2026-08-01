@@ -1,0 +1,17 @@
+{
+  "name": "trader-ledger",
+  "version": "1.0.0",
+  "description": "Personal trading, income, goals and life tracker",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5"
+  }
+}
